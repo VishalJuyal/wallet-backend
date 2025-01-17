@@ -1,7 +1,6 @@
 const { ethers } = require("ethers");
 const ethWallet = require("ethereumjs-wallet");
 
-// Set up an Ethereum provider using Infura
 const provider = new ethers.JsonRpcProvider(
   "https://mainnet.infura.io/v3/0f831e01ee5047bf938e41c110caf283"
 );
@@ -28,21 +27,17 @@ const checkBalance = async (address) => {
 
 const sendTransaction = async (privateKey, toAddress, amountInEther) => {
   try {
-    // Load wallet with private key
     const wallet = new ethers.Wallet(privateKey, provider);
 
-    // Build the transaction
     const transaction = {
       to: toAddress,
       value: ethers.parseEther(amountInEther),
-      gasLimit: 21000, // Standard gas limit for ETH transfers
+      gasLimit: 21000,
     };
 
-    // Send the transaction
     const txResponse = await wallet.sendTransaction(transaction);
     console.log("Transaction sent:", txResponse.hash);
 
-    // Wait for the transaction to be mined
     const receipt = await txResponse.wait();
     console.log("Transaction confirmed:", receipt);
   } catch (error) {
@@ -54,6 +49,5 @@ const sendTransaction = async (privateKey, toAddress, amountInEther) => {
   const wallet = createWallet();
 
   await checkBalance(wallet.address);
-  // Uncomment the line below to send a transaction
   // await sendTransaction(wallet.privateKey, wallet.address, "0.01");
 })();
